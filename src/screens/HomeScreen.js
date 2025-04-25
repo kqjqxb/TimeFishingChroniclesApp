@@ -19,7 +19,7 @@ import ChroniclesAquariumScreen from './ChroniclesAquariumScreen';
 const fontRubikRegular = 'Rubik-Regular';
 
 
-const HomePrideQuestScreen = () => {
+const ChroniclesHomeFishingScreen = () => {
   const [dimensions, setDimensions] = useState(Dimensions.get('window'));
   const [selectedTimeChroniclesPage, setSelectedTimeChroniclesPage] = useState('Home');
 
@@ -95,4 +95,4 @@ const HomePrideQuestScreen = () => {
   );
 };
 
-export default HomePrideQuestScreen;
+export default ChroniclesHomeFishingScreen;

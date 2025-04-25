@@ -29,9 +29,9 @@ const TimeChroniclesStack = () => {
 const AppNavigator = () => {
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName={'LoadPrideQuestScreen'}>
+        <Stack.Navigator initialRouteName={'ChickenRunHomeScreen'}>
           <Stack.Screen name="TimeChroniclesHome" component={HomeScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="LoadPrideQuestScreen" component={ChroniclesLoadingScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="ChickenRunHomeScreen" component={ChroniclesLoadingScreen} options={{ headerShown: false }} />
           <Stack.Screen name="TimeChroniclesOnboarding" component={TimeChroniclesOnboardingScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
     </NavigationContainer>
