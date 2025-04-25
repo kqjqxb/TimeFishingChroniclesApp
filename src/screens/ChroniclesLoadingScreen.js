@@ -12,34 +12,34 @@ const ChroniclesLoadingScreen = () => {
   const { user, setUser } = useContext(UserContext);
   const dispatch = useDispatch();
 
-  const [isCallEnOnboardingToSportVisibled, setIsCallEnOnboardingToSportVisibled] = useState(false);
-  const [initializationComplete, setInitializationComplete] = useState(false);
+  const [isChroniclesOnboardingWasVisibled, setChroniclesOnboardingWasVisibled] = useState(false);
+  const [initializationChroniclesComplete, setInitializationChroniclesComplete] = useState(false);
 
   useEffect(() => {
-    const loadCallEnToSportUser = async () => {
+    const loadChroniclesUserFisher = async () => {
       try {
         const deviceId = await DeviceInfo.getUniqueId();
         const storageKey = `currentUser_${deviceId}`;
-        const storedCallEnToSportUser = await AsyncStorage.getItem(storageKey);
-        const isCallEnOnboardingWasVisibled = await AsyncStorage.getItem('isCallEnOnboardingWasVisibled');
+        const storedChroniclesUserFisher = await AsyncStorage.getItem(storageKey);
+        const isChroniclesOnboardingFisherVis = await AsyncStorage.getItem('isChroniclesOnboardingFisherVis');
 
-        if (storedCallEnToSportUser) {
-          setUser(JSON.parse(storedCallEnToSportUser));
-          setIsCallEnOnboardingToSportVisibled(false);
-        } else if (isCallEnOnboardingWasVisibled) {
-          setIsCallEnOnboardingToSportVisibled(false);
+        if (storedChroniclesUserFisher) {
+          setUser(JSON.parse(storedChroniclesUserFisher));
+          setChroniclesOnboardingWasVisibled(false);
+        } else if (isChroniclesOnboardingFisherVis) {
+          setChroniclesOnboardingWasVisibled(false);
         } else {
-          setIsCallEnOnboardingToSportVisibled(true);
-          await AsyncStorage.setItem('isCallEnOnboardingWasVisibled', 'true');
+          setChroniclesOnboardingWasVisibled(true);
+          await AsyncStorage.setItem('isChroniclesOnboardingFisherVis', 'true');
         }
       } catch (error) {
         console.error('Error loading of montYou Real user', error);
       } finally {
-        setInitializationComplete(true);
+        setInitializationChroniclesComplete(true);
       }
     };
 
-    loadCallEnToSportUser();
+    loadChroniclesUserFisher();
   }, [setUser]);
 
   useEffect(() => {
@@ -47,23 +47,23 @@ const ChroniclesLoadingScreen = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (initializationComplete) {
+    if (initializationChroniclesComplete) {
       const timer = setTimeout(() => {
-        const destination = isCallEnOnboardingToSportVisibled ? 'TimeChroniclesOnboarding' : 'TimeChroniclesHome';
+        const destination = isChroniclesOnboardingWasVisibled ? 'TimeChroniclesOnboarding' : 'TimeChroniclesHome';
         navigation.replace(destination);
-      }, 2500);
+      }, 2555);
       return () => clearTimeout(timer);
     }
-  }, [initializationComplete, isCallEnOnboardingToSportVisibled, navigation]);
+  }, [initializationChroniclesComplete, isChroniclesOnboardingWasVisibled, navigation]);
 
   return (
     <View style={{
-      width: '100%',
-      height: '100%',
-      backgroundColor: '#002357',
       justifyContent: 'center',
-      alignSelf: 'center',
+      width: '100%',
       alignItems: 'center',
+      backgroundColor: '#002357',
+      height: '100%',
+      alignSelf: 'center',
     }}>
       <ActivityIndicator size="large" color="#3b8efb" />
     </View>
