@@ -12,6 +12,7 @@ import {
     Animated,
 } from 'react-native';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const fontInterRegular = 'Inter-Regular';
 
@@ -35,30 +36,27 @@ const CatchFishComponent = ({ setSelectedAquariumPage }) => {
     const styles = createChroniclesFactsStyles(dimensions);
     const [fishCaught, setFishCaught] = useState(0);
 
-    // Додаємо стан для рибок з унікальними ідентифікаторами
     const [activeFishes, setActiveFishes] = useState([]);
 
     useEffect(() => {
-        // Кожній рибці генеруємо унікальний id
         const fishesWithIds = aquariumFishes.map(fish => ({
             ...fish,
-            id: String(Date.now()) + Math.random(), // генеруємо унікальний id
+            id: String(Date.now()) + Math.random(),
         }));
         setActiveFishes(fishesWithIds);
     }, []);
 
-    // Компонент для анімованої рибки
     const AnimatedFish = ({ fish, onPress }) => {
         // Рандомний розмір рибки (30–70)
         const fishSize = useRef(30 + Math.random() * 40).current;
         const containerHeight = dimensions.height * 0.442;
-        // Рандомна вертикальна позиція, що не змінюється при перерендері
+
         const randomTop = useRef(Math.random() * (containerHeight - fishSize)).current;
-        // Початкова позиція: рибка починає поза лівою стороною
+
         const translateX = useRef(new Animated.Value(-fishSize)).current;
-        // Рандомна затримка перед стартом анімації
+
         const randomDelay = useRef(Math.random() * 5000).current;
-        // Рандомна тривалість переміщення
+
         const randomDuration = useRef(8000 + Math.random() * 4000).current;
 
         useEffect(() => {
@@ -70,7 +68,7 @@ const CatchFishComponent = ({ setSelectedAquariumPage }) => {
                         duration: randomDuration,
                         useNativeDriver: true,
                     }),
-                    // Миттєве повернення рибки на початок
+
                     Animated.timing(translateX, {
                         toValue: -fishSize,
                         duration: 0,
@@ -98,10 +96,19 @@ const CatchFishComponent = ({ setSelectedAquariumPage }) => {
         );
     };
 
-    // Тепер видаляємо лише одну рибку за її унікальним id
     const handleFishPress = (selectedFish) => {
         setFishCaught(prev => prev + 1);
         setActiveFishes(prev => prev.filter(f => f.id !== selectedFish.id));
+    };
+
+    const updatePlayerFishedChronicles = async (fishCount) => {
+        try {
+            const storedValue = await AsyncStorage.getItem('playerFishedChronicles');
+            const newValue = storedValue ? parseInt(storedValue, 10) + fishCount : fishCount;
+            await AsyncStorage.setItem('playerFishedChronicles', newValue.toString());
+        } catch (error) {
+            console.error('Error updating playerFishedChronicles: ', error);
+        }
     };
 
     return (
@@ -114,7 +121,8 @@ const CatchFishComponent = ({ setSelectedAquariumPage }) => {
                 flexDirection: 'row',
             }}>
                 <TouchableOpacity
-                    onPress={() => {
+                    onPress={async () => {
+                        await updatePlayerFishedChronicles(fishCaught);
                         setSelectedAquariumPage('Aquarium');
                     }}
                     style={{
@@ -175,9 +183,7 @@ const CatchFishComponent = ({ setSelectedAquariumPage }) => {
                 </View>
             </View>
 
-            {/* Блок, по якому пливуть рибки */}
             <View style={{
-                backgroundColor: 'white',
                 position: 'absolute',
                 bottom: 0,
                 right: 0,

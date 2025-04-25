@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -13,6 +13,8 @@ import {
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import EditAquariumComponent from '../components/EditAquariumComponent';
 import CatchFishComponent from '../components/CatchFishComponent';
+import AquariumComponent from '../components/AquariumComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const fontInterRegular = 'Inter-Regular';
 const fontRubikRegular = 'Rubik-Regular';
@@ -22,12 +24,35 @@ const ChroniclesAquariumScreen = ({ setSelectedTimeChroniclesPage }) => {
     const styles = createChroniclesFactsStyles(dimensions);
 
     const [selectedAquariumPage, setSelectedAquariumPage] = useState('Aquarium');
+    const [playerFishedChronicles, setPlayerFishedChronicles] = useState(0);
+
+    const [usersSubjects, setUsersSubjects] = useState([]);
+    const [userAquariumFishes, setUserAquariumFishes] = useState([]);
+
+    useEffect(() => {
+        const loadStorageData = async () => {
+            try {
+                const storedBalance = await AsyncStorage.getItem('playerFishedChronicles');
+                if (storedBalance !== null) {
+                    setPlayerFishedChronicles(parseInt(storedBalance, 10));
+                }
+                const storedSubjects = await AsyncStorage.getItem('usersSubjects');
+                if (storedSubjects !== null) {
+                    setUsersSubjects(JSON.parse(storedSubjects));
+                }
+            } catch (error) {
+                console.error('Error loading storage data: ', error);
+            }
+        };
+
+        loadStorageData();
+    }, []);
 
     return (
         <View style={{ flex: 1 }}>
             <View style={{ flex: 1, position: 'relative' }}>
                 <ImageBackground
-                    source={selectedAquariumPage === 'Catch a fish' 
+                    source={selectedAquariumPage === 'Catch a fish'
                         ? require('../assets/images/catchFishBgImage.png')
                         : require('../assets/images/chroniclesAquariumBackground.png')}
                     style={{
@@ -66,7 +91,7 @@ const ChroniclesAquariumScreen = ({ setSelectedTimeChroniclesPage }) => {
                                 </Text>
                             </View>
 
-                            <Image
+                            {/* <Image
                                 source={require('../assets/images/aquariumImage.png')}
                                 style={{
                                     width: dimensions.width * 0.8,
@@ -74,6 +99,13 @@ const ChroniclesAquariumScreen = ({ setSelectedTimeChroniclesPage }) => {
                                     alignSelf: 'center',
                                 }}
                                 resizeMode='contain'
+                            /> */}
+
+                            <AquariumComponent playerFishedChronicles={playerFishedChronicles} setPlayerFishedChronicles={setPlayerFishedChronicles} 
+                                usersSubjects={usersSubjects}
+                                setUsersSubjects={setUsersSubjects}
+                                userAquariumFishes={userAquariumFishes}
+                                setUserAquariumFishes={setUserAquariumFishes}
                             />
 
                             {['Catch a fish', 'Edit aquarium'].map((button, index) => (
@@ -122,24 +154,24 @@ const ChroniclesAquariumScreen = ({ setSelectedTimeChroniclesPage }) => {
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                 }}>
-                                    <Image 
-                                        source={require('../assets/images/homeImage.png')}
-                                        style={{
-                                            width: dimensions.width * 0.09,
-                                            height: dimensions.height * 0.05,
-                                            alignSelf: 'center',
-                                        }}
-                                        resizeMode='contain'
-                                    />
+                                <Image
+                                    source={require('../assets/images/homeImage.png')}
+                                    style={{
+                                        width: dimensions.width * 0.09,
+                                        height: dimensions.height * 0.05,
+                                        alignSelf: 'center',
+                                    }}
+                                    resizeMode='contain'
+                                />
                             </TouchableOpacity>
                         </>
                     ) : selectedAquariumPage === 'Catch a fish' ? (
                         <>
-                        <CatchFishComponent setSelectedAquariumPage={setSelectedAquariumPage} />
+                            <CatchFishComponent setSelectedAquariumPage={setSelectedAquariumPage} />
                         </>
                     ) : (
                         <>
-                            <EditAquariumComponent setSelectedAquariumPage={setSelectedAquariumPage}/>
+                            <EditAquariumComponent setSelectedAquariumPage={setSelectedAquariumPage} selectedAquariumPage={selectedAquariumPage}/>
                         </>
                     )}
 
