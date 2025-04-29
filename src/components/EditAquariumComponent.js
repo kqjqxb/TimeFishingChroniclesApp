@@ -6,9 +6,7 @@ import {
     SafeAreaView,
     TouchableOpacity,
     Image,
-    Share,
     StyleSheet,
-    ImageBackground,
     Animated,
 } from 'react-native';
 import { ArrowLeftIcon } from 'react-native-heroicons/solid';
@@ -16,7 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AquariumComponent from './AquariumComponent';
 
 const fontInterRegular = 'Inter-Regular';
-const fontRubikRegular = 'Rubik-Regular';
 
 const aquariumItems = [
     {

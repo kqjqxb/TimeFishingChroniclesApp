@@ -100,7 +100,6 @@ const CatchFishComponent = ({ setSelectedAquariumPage }) => {
         setFishCaught(prev => prev + 1);
         setActiveFishes(prev => prev.map(fish => {
             if (fish.id === selectedFish.id) {
-                // Замінюємо натиснуту рибу на нову з випадковим зображенням
                 const randomFish = aquariumFishes[Math.floor(Math.random() * aquariumFishes.length)];
                 return {
                     ...randomFish,
