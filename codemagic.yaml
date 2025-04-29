@@ -7,8 +7,8 @@ workflows:
       groups:
         - creds
       vars:
-        XCODE_WORKSPACE: "TimeFishingChronicles.xcworkspace" # <----
-        XCODE_SCHEME: "TimeFishingChronicles" # <----
+        XCODE_WORKSPACE: "TimeFishingChroniclesApp.xcworkspace" # <----
+        XCODE_SCHEME: "TimeFishingChroniclesApp" # <----
         BUNDLE_ID: "com.timefishingchronicles.app" # <----
         APP_STORE_APP_ID: 6745214855 # <----
         APP_STORE_CONNECT_KEY_ID: "BH889F2FLF" # <----
