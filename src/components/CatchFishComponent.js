@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // Встанови бібліотеку 'uuid' і імпортуй її
 import {
     View,
     Text,
@@ -11,7 +10,6 @@ import {
     StyleSheet,
     Animated,
 } from 'react-native';
-import { ArrowLeftIcon } from 'react-native-heroicons/solid';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const fontInterRegular = 'Inter-Regular';
