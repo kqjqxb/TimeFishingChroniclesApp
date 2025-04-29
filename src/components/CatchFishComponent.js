@@ -98,7 +98,17 @@ const CatchFishComponent = ({ setSelectedAquariumPage }) => {
 
     const handleFishPress = (selectedFish) => {
         setFishCaught(prev => prev + 1);
-        setActiveFishes(prev => prev.filter(f => f.id !== selectedFish.id));
+        setActiveFishes(prev => prev.map(fish => {
+            if (fish.id === selectedFish.id) {
+                // Замінюємо натиснуту рибу на нову з випадковим зображенням
+                const randomFish = aquariumFishes[Math.floor(Math.random() * aquariumFishes.length)];
+                return {
+                    ...randomFish,
+                    id: String(Date.now()) + Math.random(),
+                };
+            }
+            return fish;
+        }));
     };
 
     const updatePlayerFishedChronicles = async (fishCount) => {
