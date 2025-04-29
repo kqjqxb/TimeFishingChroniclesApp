@@ -98,7 +98,8 @@ const ChroniclesFactsScreen = ({ setSelectedTimeChroniclesPage }) => {
 
                         <TouchableOpacity
                             onPress={() => {
-                                setIsPreviewVisibled(true);
+                                // setIsPreviewVisibled(true);
+                                setSelectedTimeChroniclesPage('Home')
                             }}
                             style={[styles.button, {
                                 marginRight: dimensions.width * 0.03,

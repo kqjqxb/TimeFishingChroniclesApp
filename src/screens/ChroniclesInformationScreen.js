@@ -110,7 +110,10 @@ const ChroniclesInformationScreen = ({ setSelectedTimeChroniclesPage }) => {
             </View>
 
             <TouchableOpacity
-                onPress={onShare}
+                // onPress={onShare}
+                onPress={() => {
+                    setSelectedTimeChroniclesPage('Home');
+                }}
                 style={{
                     width: dimensions.width * 0.5,
                     height: dimensions.height * 0.09,

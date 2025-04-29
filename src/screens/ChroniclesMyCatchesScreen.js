@@ -173,7 +173,7 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
             coordinates: fishingCoordinates,
         };
 
-        const updatedCatches = [...myCatches, newCatch];
+        const updatedCatches = [newCatch, ...myCatches, ];
         setMyCatches(updatedCatches);
 
         try {
