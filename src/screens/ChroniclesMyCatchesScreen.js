@@ -43,8 +43,8 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
         longitude: null,
     });
     const [selectedLocationCoordinates, setSelectedLocationCoordinates] = useState({
-        latitude: 65.81515774443307,
-        longitude: -16.384618945093,
+        latitude: 71.5373,
+        longitude: -21.6630,
     });
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedCatchedFish, setSelectedCatchedFish] = useState(null);
@@ -202,8 +202,6 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }} accessible={false}>
-
-
                 <View style={{ flex: 1, position: 'relative' }}>
                     <View style={{
                         flexDirection: 'row',
@@ -379,7 +377,7 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
                                                             }]}>
                                                                 {catchedItem.fishingSpot
                                                                     ? catchedItem.fishingSpot
-                                                                    : `${Number(catchedItem.coordinates.latitude).toFixed(4)}, ${Number(catchedItem.coordinates.longitude).toFixed(4)}`}
+                                                                    : `${Number(catchedItem.coordinates.latitude).toFixed(2)}, ${Number(catchedItem.coordinates.longitude).toFixed(2)}`}
                                                             </Text>
                                                         </View>
 
@@ -691,7 +689,7 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
                             blurAmount={5}
                         />
 
-                        
+
 
                         <View style={{
                             width: dimensions.width * 0.898,
@@ -729,7 +727,7 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
                                 }]}
 
                                 >
-                                    {selectedCatchedFish?.typeOfFish} f f f f f f  f f f f f f f f f f
+                                    {selectedCatchedFish?.typeOfFish}
                                 </Text>
 
                                 <View style={{
@@ -772,7 +770,13 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
                                     marginLeft: dimensions.width * 0.02,
                                     fontWeight: 500,
                                 }]}>
-                                    {selectedCatchedFish?.fishingSpot}
+                                    {
+                                        selectedCatchedFish?.fishingSpot
+                                            ? `${selectedCatchedFish.fishingSpot} ${selectedCatchedFish.coordinates
+                                                ? `(${Number(selectedCatchedFish.coordinates.latitude).toFixed(4)}, ${Number(selectedCatchedFish.coordinates.longitude).toFixed(4)})`
+                                                : ''}`
+                                            : `${Number(selectedCatchedFish?.coordinates.latitude).toFixed(4)}, ${Number(selectedCatchedFish?.coordinates.longitude).toFixed(4)}`
+                                    }
                                 </Text>
                             </View>
 
