@@ -31,8 +31,6 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
     const [isMapVisible, setMapVisible] = useState(false);
     const [myCatches, setMyCatches] = useState([]);
     const [catchDetailsModalVisible, setCatchDetailsModalVisible] = useState(false);
-    const styles = createChroniclesFactsStyles(dimensions);
-
     const [searchInput, setSearchInput] = useState('');
     const [fishingSpotInput, setFishingSpotInput] = useState('');
     const [typeOfFishInput, setTypeOfFishInput] = useState('');
@@ -46,8 +44,11 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
         latitude: 71.5373,
         longitude: -21.6630,
     });
+    const [showCoordinatesAlert, setShowCoordinatesAlert] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedCatchedFish, setSelectedCatchedFish] = useState(null);
+    const styles = createChroniclesFactsStyles(dimensions);
+    const [isCoordinatesPicked, setIsCoordinatesPicked] = useState(false);
 
     const isCanSave =
         (fishingSpotInput.replace(/\s/g, '').length > 0 ||
@@ -173,7 +174,7 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
             coordinates: fishingCoordinates,
         };
 
-        const updatedCatches = [newCatch, ...myCatches, ];
+        const updatedCatches = [newCatch, ...myCatches,];
         setMyCatches(updatedCatches);
 
         try {
@@ -201,6 +202,13 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            {showCoordinatesAlert && (
+                <View style={styles.coordinatesAlert}>
+                    <Text style={styles.coordinatesAlertText}>
+                        Coordinates have been successfully saved and you can go back.
+                    </Text>
+                </View>
+            )}
             <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }} accessible={false}>
                 <View style={{ flex: 1, position: 'relative' }}>
                     <View style={{
@@ -214,10 +222,14 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
                             onPress={() => {
                                 if (isMapVisible) {
                                     setMapVisible(false);
-                                    setFishingCoordinates({
-                                        latitude: selectedLocationCoordinates.latitude,
-                                        longitude: selectedLocationCoordinates.longitude,
-                                    });
+                                    if (isCoordinatesPicked) {
+                                        setFishingCoordinates({
+                                            latitude: selectedLocationCoordinates.latitude,
+                                            longitude: selectedLocationCoordinates.longitude,
+                                        });
+                                    }
+                                    setIsCoordinatesPicked(false);
+                                    setShowCoordinatesAlert(false);
                                 }
                                 else if (isAddingMyCatchVisible)
                                     setAddingMyCatchVisible(false);
@@ -497,7 +509,9 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
                                                     color: 'white',
                                                     fontWeight: 500,
                                                 }}
-                                                placeholder='Write a place or select it on the map'
+                                                placeholder={(fishingCoordinates.latitude && fishingCoordinates.longitude) || (fishingCoordinates.latitude !== null && fishingCoordinates.longitude !== null) 
+                                                    ? `${fishingCoordinates.latitude.toFixed(2)}, ${fishingCoordinates.longitude.toFixed(2)} (You can add title)`
+                                                    : `Write a place or select it on the map`}
                                                 placeholderTextColor='white'
                                                 value={fishingSpotInput}
                                                 onChangeText={setFishingSpotInput}
@@ -630,8 +644,14 @@ const ChroniclesMyCatchesScreen = ({ setSelectedTimeChroniclesPage }) => {
                                             longitudeDelta: 0.01,
                                         }}
                                         onPress={(e) => {
+                                            setIsCoordinatesPicked(true);
                                             const { coordinate } = e.nativeEvent;
                                             setSelectedLocationCoordinates(coordinate);
+                                            setShowCoordinatesAlert(false);
+                                            setShowCoordinatesAlert(true);
+                                            setTimeout(() => {
+                                                setShowCoordinatesAlert(false);
+                                            }, 3500);
                                         }}
                                     >
                                         <Marker
@@ -936,7 +956,24 @@ const createChroniclesFactsStyles = (dimensions) => StyleSheet.create({
         marginTop: dimensions.height * 0.01,
         color: 'white',
         fontWeight: 500,
-    }
+    },
+    coordinatesAlert: {
+        position: 'absolute',
+        top: dimensions.height * 0.4,
+        left: dimensions.width * 0.1,
+        right: dimensions.width * 0.1,
+        padding: dimensions.width * 0.03,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        borderRadius: dimensions.width * 0.02,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10000,
+    },
+    coordinatesAlertText: {
+        color: 'white',
+        fontSize: dimensions.width * 0.045,
+        textAlign: 'center',
+    },
 });
 
 export default ChroniclesMyCatchesScreen;
